@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.ireaderbackend.mapper.AnnotationMapper">
+
+<resultMap id="AnnotationResultMap" type="com.library.ireaderbackend.entity.Annotation">
+    <id property="id" column="id"/>
+    <result property="userId" column="user_id"/>
+    <result property="bookId" column="book_id"/>
+    <result property="bookContentId" column="book_content_id"/>
+    <result property="chapterOrder" column="chapter_order"/>
+    <result property="type" column="type"/>
+    <result property="textContent" column="text_content"/>
+    <result property="color" column="color"/>
+    <result property="cfi" column="cfi"/>
+    <result property="startOffset" column="start_offset"/>
+    <result property="endOffset" column="end_offset"/>
+    <result property="createTime" column="create_time"/>
+</resultMap>
+
+<!-- 插入 -->
+<insert id="insert" parameterType="com.library.ireaderbackend.entity.Annotation" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO annotation(user_id, book_id, book_content_id, chapter_order, type, text_content, color, cfi, start_offset, end_offset)
+    VALUES (#{userId}, #{bookId}, #{bookContentId}, #{chapterOrder}, #{type}, #{textContent}, #{color}, #{cfi}, #{startOffset}, #{endOffset})
+</insert>
+
+<!-- 查询某本书的所有批注 -->
+<select id="findByBook" resultMap="AnnotationResultMap">
+    SELECT * FROM annotation
+    WHERE user_id = #{userId} AND book_id = #{bookId}
+    ORDER BY create_time DESC
+</select>
+
+<!-- 查询某章节的批注 -->
+<select id="findByChapter" resultMap="AnnotationResultMap">
+    SELECT * FROM annotation
+    WHERE user_id = #{userId} AND book_content_id = #{bookContentId}
+    ORDER BY create_time DESC
+</select>
+
+<!-- 删除 -->
+<delete id="delete">
+    DELETE FROM annotation WHERE id = #{id}
+</delete>
+
+<!-- 更新 -->
+<update id="update" parameterType="com.library.ireaderbackend.entity.Annotation">
+    UPDATE annotation
+    SET text_content = #{textContent}, color = #{color}
+    WHERE id = #{id}
+</update>
+
+</mapper>

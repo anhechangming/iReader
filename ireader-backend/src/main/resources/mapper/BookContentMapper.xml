@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.ireaderbackend.mapper.BookContentMapper">
+
+    <select id="findByBookId" parameterType="long" resultType="com.library.ireaderbackend.entity.BookContent">
+        SELECT * FROM book_content WHERE book_id = #{bookId} ORDER BY chapter_order
+    </select>
+
+    <select id="findByBookIdAndOrder" parameterType="map" resultType="com.library.ireaderbackend.entity.BookContent">
+        SELECT * FROM book_content WHERE book_id = #{bookId} AND chapter_order = #{order}
+    </select>
+
+    <insert id="insert" parameterType="com.library.ireaderbackend.entity.BookContent">
+        INSERT INTO book_content (book_id, chapter_title, chapter_content, chapter_order)
+        VALUES (#{bookId}, #{chapterTitle}, #{chapterContent}, #{chapterOrder})
+    </insert>
+
+    <insert id="insertBatch" parameterType="list">
+        INSERT INTO book_content (book_id, chapter_title, chapter_content, chapter_order)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.bookId}, #{item.chapterTitle}, #{item.chapterContent}, #{item.chapterOrder})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByBookId" parameterType="long">
+        DELETE FROM book_content WHERE book_id = #{bookId}
+    </delete>
+</mapper>

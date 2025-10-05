@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.ireaderbackend.mapper.BookMapper">
+
+<select id="findAll" resultType="com.library.ireaderbackend.entity.Book">
+    SELECT * FROM book  WHERE visibility = 'pending'
+</select>
+
+<select id="findById" parameterType="long" resultType="com.library.ireaderbackend.entity.Book">
+    SELECT * FROM book WHERE id = #{id}
+</select>
+
+<select id="findByCategory" parameterType="string" resultType="com.library.ireaderbackend.entity.Book">
+    SELECT * FROM book WHERE category = #{category}
+</select>
+
+<select id="searchByKeyword" parameterType="string" resultType="com.library.ireaderbackend.entity.Book">
+    SELECT * FROM book
+    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+    OR author LIKE CONCAT('%', #{keyword}, '%')
+</select>
+
+<insert id="insert" parameterType="com.library.ireaderbackend.entity.Book" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO book (title, author, cover, category, intro, file_path, file_type, is_free, publisher, publish_time, isbn, brand, uploader_id, visibility)
+        VALUES (#{title}, #{author}, #{cover}, #{category}, #{intro}, #{filePath}, #{fileType}, #{isFree}, #{publisher}, #{publishTime}, #{isbn}, #{brand},#{uploader_id},#{visibility})
+</insert>
+
+
+<update id="update" parameterType="com.library.ireaderbackend.entity.Book">
+    UPDATE book
+    SET title=#{title}, author=#{author}, cover=#{cover}, category=#{category}, intro=#{intro},
+    file_path=#{filePath}, file_type=#{fileType}, is_free=#{isFree}, publisher=#{publisher},
+    publish_time=#{publishTime}, isbn=#{isbn}, brand=#{brand}
+    WHERE id=#{id}
+</update>
+
+<delete id="delete" parameterType="long">
+    DELETE FROM book WHERE id=#{id}
+</delete>
+<select id="findByCategoryAndKeyword" resultType="com.library.ireaderbackend.entity.Book">
+        SELECT *
+        FROM book
+        WHERE category = #{category}
+          AND (title LIKE CONCAT('%', #{keyword}, '%')
+            OR author LIKE CONCAT('%', #{keyword}, '%'))
+</select>
+    <!-- 根据书籍ID列表和关键字查询 -->
+    <select id="findByIdsAndKeyword" resultType="com.library.ireaderbackend.entity.Book">
+        SELECT *
+        FROM book
+        WHERE id IN
+        <foreach item="id" collection="bookIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        <if test="keyword != null and keyword != ''">
+            AND title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <!-- 根据书籍ID列表查询 -->
+    <select id="findByIds" resultType="com.library.ireaderbackend.entity.Book">
+        SELECT *
+        FROM book
+        WHERE id IN
+        <foreach item="id" collection="bookIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>
