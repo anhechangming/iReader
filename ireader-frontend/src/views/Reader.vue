@@ -156,7 +156,7 @@ export default {
       fontSize: 18,
       lineHeight: 1.9,
       avatarMenu: false,
-      avatarUrl: 'https://img.icons8.com/emoji/48/000000/sponge.png',
+      avatarUrl: 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEDINho4O3zb7IlJpv-ubh9RS5dt4IrgwAC8RsAAmykCFfh2rkqr_C9ATYE.jpg',
       inShelf: false,
       addingShelf: false,
 
